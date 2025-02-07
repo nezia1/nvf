@@ -72,16 +72,19 @@
           else noFormat
         },
           cmd = ${packageToCmd cfg.lsp.package "nixd"},
-        ${optionalString cfg.format.enable ''
           settings = {
             nixd = {
-          ${optionalString (cfg.format.type == "alejandra")
+             nixpkgs = {
+              expr = "import <nixpkgs> { }",
+             },
+          ${optionalString cfg.format.enable ''
+             ${optionalString (cfg.format.type == "alejandra")
             ''
               formatting = {
                 command = {"${cfg.format.package}/bin/alejandra", "--quiet"},
               },
             ''}
-          ${optionalString (cfg.format.type == "nixfmt")
+            ${optionalString (cfg.format.type == "nixfmt")
             ''
               formatting = {
                 command = {"${cfg.format.package}/bin/nixfmt"},
@@ -90,7 +93,7 @@
             },
           },
         ''}
-        }
+         }
       '';
     };
   };
